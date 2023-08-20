@@ -4,6 +4,8 @@
 #include <stdarg.h>
 #include <unistd.h>
 
+#define BUFSIZE 1024
+
 int _printf(const char *format, ...);
 
 #endif

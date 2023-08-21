@@ -34,7 +34,8 @@ int _printf(const char *format, ...)
 		}
 		else
 		{
-			_print(buffer, &strlen)
+			_print(buffer, &strlen);
+			++i;
 			no = handle_specifiers(format, buffer, arg, &i);
 			if (no == -1)
 				return (-1);

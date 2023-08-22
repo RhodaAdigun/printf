@@ -1,63 +1,66 @@
 #include "main.h"
 
-/**
- *
- */
+void print_buffer(char buffer[], int *buff_ind);
 
+/**
+ * _printf - Printf function
+ * @format: format.
+ * Return: Printed chars..
+ */
 int _printf(const char *format, ...)
 {
-	va_list arg;
-	char buffer[BUFSIZE];
-	int i, no, printed;
-	unsigned int str_len;
+	int i, printed = 0, printed_chars = 0;
+	int flags, width, precision, size, buff_ind = 0;
+	va_list list;
+	char buffer[BUFF_SIZE];
 
 	if (format == NULL)
 		return (-1);
 
-	str_len = 0;
-	printed = 0;
-	no = 0;
-	va_start(arg, format)
+	va_start(list, format);
 
-	for (i = 0; format[i] != '\0'; i++)
+	for (i = 0; format && format[i] != '\0'; i++)
 	{
-		if (str_len > BUFSIZE)
-			break;
-
 		if (format[i] != '%')
 		{
-			buffer[str_len] = format[i];
-			str_len++;
-			if (str_len == BUFSIZE)
-				_print(buffer, &strlen);
-			printed++
+			buffer[buff_ind++] = format[i];
+			if (buff_ind == BUFF_SIZE)
+				print_buffer(buffer, &buff_ind);
+			/* write(1, &format[i], 1);*/
+			printed_chars++;
 		}
 		else
 		{
-			_print(buffer, &strlen);
+			print_buffer(buffer, &buff_ind);
+			flags = get_flags(format, &i);
+			width = get_width(format, &i, list);
+			precision = get_precision(format, &i, list);
+			size = get_size(format, &i);
 			++i;
-			no = handle_specifiers(format, buffer, arg, &i);
-			if (no == -1)
+			printed = handle_print(format, &i, list, buffer,
+				flags, width, precision, size);
+			if (printed == -1)
 				return (-1);
-			printed + 1 = no
+			printed_chars += printed;
 		}
 	}
-	_print(buffer, &str_len);
-	va_end (arg);
-	return (printed);
+
+	print_buffer(buffer, &buff_ind);
+
+	va_end(list);
+
+	return (printed_chars);
 }
 
 /**
- *
-
-int _print(char *buffer, size_t str_len)
+ * print_buffer - Prints the contents of the buffer if it exist
+ * @buffer: Array of chars
+ * @buff_ind: Index at which to add next char, represents the length.
+ */
+void print_buffer(char buffer[], int *buff_ind)
 {
-	int num_char;
+	if (*buff_ind > 0)
+		write(1, &buffer[0], *buff_ind);
 
-	num_char
-	if (str_len > 0)
-		write (2, &buffer, str_len);
-
-	return (num_char)
+	*buff_ind = 0;
 }
-*/
